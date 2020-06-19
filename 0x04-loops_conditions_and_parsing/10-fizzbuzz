@@ -5,14 +5,14 @@ for i in {1..100}
 do
     if [ $(( i%15 )) -eq 0 ]
     then
-        echo "Fizzbuzz"
+        printf "Fizzbuzz\n"
     elif [ $(( i%5 )) -eq 0 ]
     then
-        echo "Buzz"
+        printf "Buzz\n"
     elif [ $(( i%3 )) -eq 0 ]
     then
-        echo "Fizz"
+        printf "Fizz\n"
     else
-        echo "$i"
+        printf "%d\n" $i  
     fi
 done
