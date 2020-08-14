@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # install load balancer
-sudo apt-get install software-properties-common
-sudo add-apt-repository ppa:vbernat/haproxy-1.8
+sudo apt-get install software-properties-common -y
+sudo add-apt-repository ppa:vbernat/haproxy-1.8 -y
 sudo apt-get -y update
-sudo apt-get install haproxy=1.8.\*
+sudo apt-get install haproxy=1.8.\* -y
 echo "ENABLED=1" >> /etc/default/haproxy
 sed -i "$ a \listen holberton\n\tbind *:80\n\tmode http\n\tstats enable\n\tbalance roundrobin" /etc/haproxy/haproxy.cfg
 sed -i "$ a \\\tserver 1501-web-01 34.73.23.33:80 check\n\tserver 1501-web-02 34.236.145.76:80 check" /etc/haproxy/haproxy.cfg
