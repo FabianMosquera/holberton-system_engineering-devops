@@ -1,26 +1,30 @@
 #!/usr/bin/python3
-"""Script that uses REST API"""
+"""
+Using what you did in the task #0, extend your
+Python script to export data in the JSON format
+"""
 import json
 import requests
-
-
-def make_all(users=None, todos=None):
-    """Turns all payloads into JSON format"""
-    all_list = []
-    alljson = {}
-    with open("todo_all_employees.json", "w") as f:
-        for i in users:
-            u = i.get("id")
-            for i in todos:
-                if u == i.get("userId"):
-                    all_list.append({"username": users[0].get("username"),
-                                     "task": i.get("title"),
-                                     "completed": i.get("completed")})
-            alljson[u] = all_list
-        json.dump(alljson, f)
+from sys import argv
 
 
 if __name__ == "__main__":
-    users = requests.get("https://jsonplaceholder.typicode.com/users/").json()
-    todos = requests.get("https://jsonplaceholder.typicode.com/todos/").json()
-    make_all(users, todos)
+    api_url = 'https://jsonplaceholder.typicode.com'
+    users_url = '{}/users'.format(api_url)
+    r_users = requests.get(users_url).json()
+    users_dict = {}
+    for user in r_users:
+        user_id = user.get("id")
+        todos_user_url = '{}/todos?userId={}'.format(api_url, user_id)
+        r_todos_user = requests.get(todos_user_url).json()
+        tasks_list = []
+        for task in r_todos_user:
+            task_dict = {
+                "username": user.get("username"),
+                "task": task.get("title"),
+                "completed": task.get("completed")
+            }
+            tasks_list.append(task_dict)
+        users_dict[user_id] = tasks_list
+        with open('todo_all_employees.json', 'w') as jsonfile:
+            json.dump(users_dict, jsonfile)
